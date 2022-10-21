@@ -1,7 +1,10 @@
 export default {
   COLORS: {
+    BROWN: "#635A4E",
+
     WHITE: "#FFFFFF",
 
+    GRAY_900: "#121214",
     GRAY_800: "#1B1D1E",
     GRAY_700: "#202024",
     GRAY_600: "#353338",
@@ -9,7 +12,8 @@ export default {
     GRAY_200: "#C4C4CC",
     GRAY_100: "#E1E1E6",
 
-    GREEN: "#E5F0DB",
+    GREEN: "#BBCBA0",
+    GREEN_LIGHT: "#E5F0DB",
     GREEN_DARK: "#639339",
 
     RED: "#F4E6E7",

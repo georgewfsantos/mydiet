@@ -1,14 +1,18 @@
+import { ArrowLeft } from "phosphor-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled, { css } from "styled-components/native";
-import { ArrowUpRight } from "phosphor-react-native";
 
-export const Container = styled.View`
-  width: 100%;
+export const Container = styled(SafeAreaView)`
+  flex: 1;
   background-color: ${({ theme }) => theme.COLORS.GREEN_LIGHT};
-  justify-content: center;
+`;
+
+export const PercentageWrapper = styled.View`
+  width: 100%;
   align-items: center;
+  justify-content: center;
   padding: 20px 16px;
-  margin-top: 40px;
-  border-radius: 8px;
+  margin-top: 24px;
 `;
 
 export const Percentage = styled.Text`
@@ -29,12 +33,23 @@ export const Caption = styled.Text`
 
 export const IconContainer = styled.TouchableOpacity`
   position: absolute;
-  right: 8px;
+  left: 24px;
   top: 8px;
   align-items: center;
 `;
 
-export const ArrowDiagonalIcon = styled(ArrowUpRight).attrs(({ theme }) => ({
+export const ArrowLeftlIcon = styled(ArrowLeft).attrs(({ theme }) => ({
   size: 24,
   color: theme.COLORS.GREEN_DARK,
 }))``;
+
+export const Content = styled.View`
+  width: 100%;
+  height: 80%;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_700};
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  position: absolute;
+  bottom: 0;
+  padding: 24px;
+`;
