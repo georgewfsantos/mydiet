@@ -16,7 +16,8 @@ export default {
     GREEN_LIGHT: "#E5F0DB",
     GREEN_DARK: "#639339",
 
-    RED: "#F4E6E7",
+    RED: "#F3BABD",
+    RED_LIGHT: "#F4E6E7",
     RED_DARK: "#BF3B44",
   },
   FONT_FAMILY: {

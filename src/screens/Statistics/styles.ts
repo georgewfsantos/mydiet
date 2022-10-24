@@ -53,3 +53,18 @@ export const Content = styled.View`
   bottom: 0;
   padding: 24px;
 `;
+
+export const Header = styled.Text`
+  text-align: center;
+  margin: 16px 0px 24px 0px;
+  ${({ theme }) => css`
+    font-family: ${theme.FONT_FAMILY.BOLD};
+    font-size: ${theme.FONT_SIZE.SM}px;
+    color: ${theme.COLORS.GRAY_100};
+  `};
+`;
+
+export const OnAndOffDietInfo = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;

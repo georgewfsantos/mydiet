@@ -1,4 +1,4 @@
-import { SectionList, Text } from "react-native";
+import { SectionList } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { Plus } from "phosphor-react-native";
@@ -6,10 +6,10 @@ import { useTheme } from "styled-components";
 
 import { Button } from "@components/Button";
 import { Header } from "@components/Header";
+import { Meal } from "@components/Meal";
 import { PercentageCard } from "@components/PercentageCard";
 
 import { Container, MealSectionTitle, MealsHeading } from "./styles";
-import { Meal } from "@components/Meal";
 
 const DATA = [
   {
@@ -49,7 +49,7 @@ export function Home() {
         }
         title="Nova refeição"
         color={COLORS.BROWN}
-        onPress={() => navigation.navigate("Statistics")}
+        onPress={() => navigation.navigate("RegisterMeal")}
       />
 
       <SectionList
@@ -58,7 +58,7 @@ export function Home() {
         renderSectionHeader={({ section: { title } }) => (
           <MealSectionTitle>{title}</MealSectionTitle>
         )}
-        renderItem={({ item }) => <Meal title={item} />}
+        renderItem={({ item }) => <Meal title={item} time="20:00" />}
         showsVerticalScrollIndicator={false}
         style={{ marginTop: 32 }}
         contentContainerStyle={{
