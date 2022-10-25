@@ -57,7 +57,13 @@ export function Home() {
         renderSectionHeader={({ section: { title } }) => (
           <MealSectionTitle>{title}</MealSectionTitle>
         )}
-        renderItem={({ item }) => <Meal title={item} time="20:00" />}
+        renderItem={({ item }) => (
+          <Meal
+            title={item}
+            time="20:00"
+            onPress={() => navigation.navigate("MealDetails", { meal: {} })}
+          />
+        )}
         showsVerticalScrollIndicator={false}
         style={{ marginTop: 32 }}
         contentContainerStyle={{

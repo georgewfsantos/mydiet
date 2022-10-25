@@ -1,17 +1,23 @@
-import { TouchableOpacityProps } from "react-native";
-import {} from "phosphor-react-native";
-
-import { Container, Title } from "./styles";
 import { ReactNode } from "react";
+
+import { TouchableOpacityProps } from "react-native";
+
+import { ButtonVariant, Container, Title } from "./styles";
 
 type Props = TouchableOpacityProps & {
   icon?: ReactNode;
   title: string;
+  variant?: ButtonVariant;
 };
 
-export function Button({ icon: Icon, title, ...props }: Props) {
+export function Button({
+  icon: Icon,
+  title,
+  variant = "contained",
+  ...props
+}: Props) {
   return (
-    <Container {...props}>
+    <Container variant={variant} {...props}>
       {Icon}
       <Title>{title}</Title>
     </Container>

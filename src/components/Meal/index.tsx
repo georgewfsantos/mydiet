@@ -1,4 +1,5 @@
 import { Circle } from "phosphor-react-native";
+import { TouchableOpacityProps } from "react-native";
 import { useTheme } from "styled-components";
 import {
   Container,
@@ -8,16 +9,16 @@ import {
   MealTitle,
 } from "./styles";
 
-type Props = {
+type Props = TouchableOpacityProps & {
   title: string;
   time: string;
 };
 
-export function Meal({ title, time }: Props) {
+export function Meal({ title, time, ...props }: Props) {
   const { COLORS } = useTheme();
 
   return (
-    <Container>
+    <Container {...props}>
       <LeftWrapper>
         <Time>{time}</Time>
         <VerticalDivider />

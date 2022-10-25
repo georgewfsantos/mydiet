@@ -9,6 +9,9 @@ export declare global {
       Feedback: {
         onDiet: string;
       };
+      MealDetails: {
+        meal: {};
+      };
     }
   }
 }

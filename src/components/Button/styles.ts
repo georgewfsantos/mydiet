@@ -1,13 +1,24 @@
 import styled, { css } from "styled-components/native";
 
-export const Container = styled.TouchableOpacity`
+export type ButtonVariant = "contained" | "outlined";
+
+type ContainerProps = {
+  variant?: ButtonVariant;
+};
+
+export const Container = styled.TouchableOpacity<ContainerProps>`
   width: 100%;
   justify-content: center;
   flex-direction: row;
   align-items: center;
   border-radius: 6px;
-  background-color: ${({ theme }) => theme.COLORS.BROWN};
+  background-color: ${({ theme, variant }) =>
+    variant === "contained" ? theme.COLORS.BROWN : "transparent"};
   height: 50px;
+  margin-bottom: 8px;
+
+  border: ${({ theme, variant }) =>
+    variant === "outlined" && `1px solid ${theme.COLORS.GRAY_200}`};
 `;
 
 export const Title = styled.Text`
