@@ -48,7 +48,6 @@ export function Home() {
           <Plus size={18} color={COLORS.WHITE} style={{ marginRight: 12 }} />
         }
         title="Nova refeição"
-        color={COLORS.BROWN}
         onPress={() => navigation.navigate("RegisterMeal")}
       />
 

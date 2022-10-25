@@ -4,11 +4,12 @@ import { Container, Label, CustomInput } from "./styles";
 
 type Props = TextInputProps & {
   label: string;
+  fullWidth?: boolean;
 };
 
-export function Input({ label, ...props }: Props) {
+export function Input({ label, fullWidth = true, ...props }: Props) {
   return (
-    <Container>
+    <Container fullWidth={fullWidth}>
       <Label>{label}</Label>
       <CustomInput
         style={{ textAlignVertical: props.multiline ? "top" : null }}

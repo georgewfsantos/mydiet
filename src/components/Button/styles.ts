@@ -1,19 +1,12 @@
-import { ReactNode } from "react";
 import styled, { css } from "styled-components/native";
 
-export type ButtonVariant = "primary" | "secondary";
-
-type ContainerProps = {
-  color: ButtonVariant;
-};
-
-export const Container = styled.TouchableOpacity<ContainerProps>`
+export const Container = styled.TouchableOpacity`
   width: 100%;
   justify-content: center;
   flex-direction: row;
   align-items: center;
   border-radius: 6px;
-  background-color: ${({ color }) => color};
+  background-color: ${({ theme }) => theme.COLORS.BROWN};
   height: 50px;
 `;
 

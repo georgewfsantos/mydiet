@@ -7,12 +7,11 @@ import { ReactNode } from "react";
 type Props = TouchableOpacityProps & {
   icon?: ReactNode;
   title: string;
-  color: string;
 };
 
-export function Button({ icon: Icon, title, color, ...props }: Props) {
+export function Button({ icon: Icon, title, ...props }: Props) {
   return (
-    <Container color={color} {...props}>
+    <Container {...props}>
       {Icon}
       <Title>{title}</Title>
     </Container>

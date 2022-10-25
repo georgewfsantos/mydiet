@@ -6,6 +6,9 @@ export declare global {
         onDietPercentage: number;
       };
       RegisterMeal: undefined;
+      Feedback: {
+        onDiet: string;
+      };
     }
   }
 }

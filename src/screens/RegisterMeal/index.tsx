@@ -1,8 +1,11 @@
+import { useState } from "react";
+
 import { StatusBar } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { Input } from "@components/Input";
+import { YesOrNo, YesOrNoButton } from "@components/YesOrNoButton";
 
 import {
   Container,
@@ -14,11 +17,20 @@ import {
   Content,
   Form,
   DateAndTime,
-  DateAndTimeInput,
+  OnOrOffDietPicker,
+  Label,
+  Options,
 } from "./styles";
+import { Button } from "@components/Button";
+
+type SelectedButton = YesOrNo | "";
 
 export function RegisterMeal() {
+  const [selectedButton, setSelectedButton] = useState<SelectedButton>("");
+
   const navigation = useNavigation();
+
+  console.log(selectedButton);
 
   return (
     <Container>
@@ -40,9 +52,30 @@ export function RegisterMeal() {
           <Input label="Descrição" multiline={true} numberOfLines={6} />
 
           <DateAndTime>
-            <Input label="Data" />
-            <Input label="Time" />
+            <Input label="Data" fullWidth={false} />
+            <Input label="Time" fullWidth={false} />
           </DateAndTime>
+
+          <OnOrOffDietPicker>
+            <Label>Está dentro da Dieta?</Label>
+            <Options>
+              <YesOrNoButton
+                type="yes"
+                isSelected={selectedButton === "yes"}
+                onPress={() => setSelectedButton("yes")}
+              />
+              <YesOrNoButton
+                type="no"
+                isSelected={selectedButton === "no"}
+                onPress={() => setSelectedButton("no")}
+              />
+            </Options>
+          </OnOrOffDietPicker>
+
+          <Button
+            title="Cadastrar refeição"
+            onPress={() => navigation.navigate("Feedback", { onDiet: "" })}
+          />
         </Form>
       </Content>
     </Container>
