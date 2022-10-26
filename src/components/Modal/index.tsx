@@ -6,7 +6,7 @@ import {
   ConfirmationText,
   ButtonGroup,
   ButtonWrapper,
-  ModalWrapper,
+  Overlay,
 } from "./styles";
 
 type Props = ModalProps & {
@@ -17,7 +17,7 @@ type Props = ModalProps & {
 export function Modal({ onCancel, onConfirmation, ...props }: Props) {
   return (
     <Container {...props}>
-      <ModalWrapper>
+      <Overlay>
         <Content>
           <ConfirmationText>
             Deseja realmente excluir o {"\n"} registro da refeição?
@@ -32,7 +32,7 @@ export function Modal({ onCancel, onConfirmation, ...props }: Props) {
             </ButtonWrapper>
           </ButtonGroup>
         </Content>
-      </ModalWrapper>
+      </Overlay>
     </Container>
   );
 }

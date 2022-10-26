@@ -1,14 +1,14 @@
 import styled, { css } from "styled-components/native";
 
-export const ModalWrapper = styled.View`
+export const Container = styled.Modal`
+  background-color: red;
+`;
+
+export const Overlay = styled.View`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.65);
   justify-content: center;
   padding: 24px;
-`;
-
-export const Container = styled.Modal`
-  background-color: red;
 `;
 
 export const Content = styled.View`
