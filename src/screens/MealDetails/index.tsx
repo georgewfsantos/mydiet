@@ -1,8 +1,13 @@
+import { useState } from "react";
+
+import { StatusBar } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import { PencilSimpleLine, Trash } from "phosphor-react-native";
 import { useTheme } from "styled-components";
 
 import { Button } from "@components/Button";
+import { Modal } from "@components/Modal";
 
 import {
   Container,
@@ -23,12 +28,23 @@ import {
 } from "./styles";
 
 export function MealDetails() {
+  const [showModal, setShowModal] = useState(false);
+
   const { COLORS } = useTheme();
 
   const navigation = useNavigation();
 
+  function closeModal() {
+    setShowModal(false);
+  }
+
   return (
     <Container>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <Header>
         <IconContainer onPress={() => navigation.goBack()}>
           <GoBackIcon />
@@ -59,14 +75,23 @@ export function MealDetails() {
                 style={{ marginRight: 12 }}
               />
             }
+            onPress={() => navigation.navigate("EditMeal", { meal: {} })}
           />
           <Button
             title="Excluir refeição"
             icon={<Trash color={COLORS.WHITE} style={{ marginRight: 12 }} />}
             variant="outlined"
+            onPress={() => setShowModal(true)}
           />
         </ButtonGroupWrapper>
       </Content>
+      <Modal
+        visible={showModal}
+        statusBarTranslucent
+        transparent
+        onCancel={closeModal}
+        onConfirmation={() => {}}
+      />
     </Container>
   );
 }

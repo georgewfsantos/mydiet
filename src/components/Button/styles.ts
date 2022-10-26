@@ -17,8 +17,11 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
   height: 50px;
   margin-bottom: 8px;
 
-  border: ${({ theme, variant }) =>
-    variant === "outlined" && `1px solid ${theme.COLORS.GRAY_200}`};
+  ${({ theme, variant }) =>
+    variant === "outlined" &&
+    css`
+      border: 1px solid ${theme.COLORS.GRAY_200};
+    `};
 `;
 
 export const Title = styled.Text`
