@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { Statisctics } from "@utils/types";
 
 import {
   ArrowDiagonalIcon,
@@ -8,12 +9,18 @@ import {
   IconContainer,
 } from "./styles";
 
-export function PercentageCard() {
+type Props = {
+  statistics: Statisctics;
+};
+
+export function PercentageCard({ statistics }: Props) {
   const navigation = useNavigation();
+
+  const { onDiet } = statistics;
 
   return (
     <Container>
-      <Percentage>90,86%</Percentage>
+      <Percentage>{onDiet?.percentage}%</Percentage>
       <Caption>das refeições dentro da dieta</Caption>
       <IconContainer
         onPress={() =>

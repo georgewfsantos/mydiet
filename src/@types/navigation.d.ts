@@ -13,7 +13,7 @@ export declare global {
         onDiet: string;
       };
       MealDetails: {
-        meal: {};
+        mealId: string;
       };
     }
   }

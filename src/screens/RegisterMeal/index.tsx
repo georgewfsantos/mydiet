@@ -1,11 +1,16 @@
 import { useState } from "react";
 
-import { StatusBar } from "react-native";
+import { Alert, StatusBar } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
-import { Input } from "@components/Input";
-import { YesOrNo, YesOrNoButton } from "@components/YesOrNoButton";
+import { YesOrNo } from "@components/YesOrNoButton";
+
+import { MEALS } from "@utils/storageKeys";
+import { getMealsFromStorage } from "@utils/storage";
+
+import { MealForm } from "@components/MealForm";
 
 import {
   Container,
@@ -16,8 +21,6 @@ import {
   HeaderRightElement,
   Content,
 } from "./styles";
-import { Button } from "@components/Button";
-import { MealForm } from "@components/MealForm";
 
 type SelectedButton = YesOrNo | "";
 

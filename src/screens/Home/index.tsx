@@ -1,6 +1,8 @@
+import { useCallback, useEffect, useState } from "react";
+
 import { SectionList } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { Plus } from "phosphor-react-native";
 import { useTheme } from "styled-components";
 
@@ -9,37 +11,75 @@ import { Header } from "@components/Header";
 import { Meal } from "@components/Meal";
 import { PercentageCard } from "@components/PercentageCard";
 
+import { getMealsFromStorage } from "@utils/storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MEALS } from "@utils/storageKeys";
+import { MealByDate, Statisctics } from "@utils/types";
+
 import { Container, MealSectionTitle, MealsHeading } from "./styles";
 
-const DATA = [
-  {
-    title: "12.08.2022",
-    data: ["Pizza", "Burger", "Risotto"],
-  },
-  {
-    title: "11.08.2022",
-    data: ["French Fries", "Onion Rings", "Fried Shrimps"],
-  },
-  {
-    title: "10.08.2022",
-    data: ["Water", "Coke", "Beer"],
-  },
-  {
-    title: "09.08.2022",
-    data: ["Cheese Cake", "Ice Cream"],
-  },
-];
-
 export function Home() {
+  const [mealsByDate, setMealsByDate] = useState<MealByDate[]>([]);
+  const [statistics, setStatistics] = useState<Statisctics>({} as Statisctics);
+
+  const { onDiet } = statistics;
+
   const { COLORS } = useTheme();
 
   const navigation = useNavigation();
+
+  const replaceSlashWithPeriod = (text: string) =>
+    text.replace("/", ".").replace("/", ".");
+
+  async function sortMealsByDate() {
+    const storedMeals = await getMealsFromStorage();
+
+    const dates = storedMeals.map((meal) => meal.date);
+
+    const sortedMeals = dates.map((date) => {
+      const meals = storedMeals.filter((item) => item.date === date);
+
+      return {
+        title: date,
+        data: meals,
+      };
+    });
+
+    setMealsByDate(sortedMeals);
+  }
+
+  async function calculateDietStatistics() {
+    const meals = await getMealsFromStorage();
+
+    const onDietMealsPercentage =
+      (meals.filter((meal) => meal.onDiet === "yes").length / meals.length) *
+      100;
+
+    setStatistics({
+      registeredMeals: meals.length,
+      onDiet: {
+        total: meals.filter((meal) => meal.onDiet === "yes").length,
+        percentage: onDietMealsPercentage,
+        bestSequence: 0,
+      },
+      offDiet: {
+        total: meals.filter((meal) => meal.onDiet === "no").length,
+      },
+    });
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      sortMealsByDate();
+      calculateDietStatistics();
+    }, [])
+  );
 
   return (
     <Container>
       <Header />
 
-      <PercentageCard />
+      {onDiet?.percentage > 0 && <PercentageCard statistics={statistics} />}
 
       <MealsHeading>Refeições</MealsHeading>
 
@@ -52,16 +92,18 @@ export function Home() {
       />
 
       <SectionList
-        sections={DATA}
-        keyExtractor={(item) => item}
+        sections={mealsByDate}
+        keyExtractor={(item) => item.id}
         renderSectionHeader={({ section: { title } }) => (
-          <MealSectionTitle>{title}</MealSectionTitle>
+          <MealSectionTitle>{replaceSlashWithPeriod(title)}</MealSectionTitle>
         )}
         renderItem={({ item }) => (
           <Meal
-            title={item}
-            time="20:00"
-            onPress={() => navigation.navigate("MealDetails", { meal: {} })}
+            title={item.name}
+            time={item.time}
+            onPress={() =>
+              navigation.navigate("MealDetails", { mealId: item.id })
+            }
           />
         )}
         showsVerticalScrollIndicator={false}
