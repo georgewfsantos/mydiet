@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Alert } from "react-native";
 
@@ -9,23 +9,23 @@ import uuid from "react-native-uuid";
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { YesOrNo, YesOrNoButton } from "@components/YesOrNoButton";
-import { MEALS, STATISTICS } from "@utils/storageKeys";
-import { getMealsFromStorage } from "@utils/storage";
+import { MEALS } from "@utils/storageKeys";
+import {
+  calculateAndSaveStatistics,
+  getMealsFromStorage,
+} from "@utils/storage";
+import { Meal } from "@utils/types";
 
 import { Form, DateAndTime, OnOrOffDietPicker, Label, Options } from "./styles";
-import { Meal, MealByDate } from "@utils/types";
 
 type SelectedButton = YesOrNo | "";
 
 type Props = {
   isEditMode?: boolean;
+  data?: Meal;
 };
 
-type Sequence = {
-  [index: number]: [number];
-};
-
-export function MealForm({ isEditMode = false }: Props) {
+export function MealForm({ isEditMode = false, data }: Props) {
   const [selectedButton, setSelectedButton] = useState<SelectedButton>("");
 
   const [name, setName] = useState("");
@@ -34,51 +34,6 @@ export function MealForm({ isEditMode = false }: Props) {
   const [time, setTime] = useState("");
 
   const navigation = useNavigation();
-
-  async function calculateAndSaveStatistics() {
-    const meals = await getMealsFromStorage();
-
-    const onDietMealsPercentage = (
-      (meals.filter((meal: Meal) => meal.onDiet === "yes").length /
-        meals.length) *
-      100
-    ).toFixed(2);
-
-    const getBestSequence = () => {
-      const sequences = {};
-      let onDietIndex = 0;
-
-      meals.forEach((meal) => {
-        if (meal.onDiet === "yes") {
-          sequences[onDietIndex] = (sequences[onDietIndex] ?? 0) + 1;
-        }
-
-        if (meal.onDiet === "no") {
-          onDietIndex++;
-        }
-      });
-
-      return Math.max.apply(null, Object.values(sequences));
-    };
-
-    const statistics = {
-      registeredMeals: meals.length,
-      onDiet: {
-        total: meals.filter((meal) => meal.onDiet === "yes").length,
-        percentage: onDietMealsPercentage,
-        bestSequence: getBestSequence(),
-      },
-      offDiet: {
-        total: meals.filter((meal) => meal.onDiet === "no").length,
-      },
-    };
-
-    try {
-      await AsyncStorage.setItem(STATISTICS, JSON.stringify(statistics));
-    } catch (error) {
-      throw error;
-    }
-  }
 
   async function handleMealRegistration() {
     try {
@@ -107,6 +62,47 @@ export function MealForm({ isEditMode = false }: Props) {
       );
     }
   }
+
+  async function handleMealEditing() {
+    try {
+      const storedMeals = await getMealsFromStorage();
+
+      const mealToBeEdited = storedMeals.find((item) => item.id === data.id);
+
+      const meals = storedMeals.map((meal) => {
+        if (meal.id === mealToBeEdited.id) {
+          return {
+            name,
+            description,
+            date,
+            time,
+            onDiet: selectedButton,
+          };
+        }
+
+        return meal;
+      });
+
+      await AsyncStorage.setItem(MEALS, JSON.stringify(meals));
+
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(
+        "Edição de Refeição",
+        "Não foi possível editar os dados da refeição."
+      );
+    }
+  }
+
+  useEffect(() => {
+    if (isEditMode && data) {
+      setName(data.name);
+      setDescription(data.description);
+      setDate(data.date);
+      setTime(data.time);
+      setSelectedButton(data.onDiet);
+    }
+  }, [data]);
 
   return (
     <Form>
@@ -152,7 +148,7 @@ export function MealForm({ isEditMode = false }: Props) {
 
       <Button
         title={isEditMode ? "Salvar Alterações" : "Cadastrar refeição"}
-        onPress={handleMealRegistration}
+        onPress={isEditMode ? handleMealEditing : handleMealRegistration}
       />
     </Form>
   );

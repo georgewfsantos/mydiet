@@ -1,5 +1,10 @@
 import styled, { css } from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { YesOrNo } from "@components/YesOrNoButton";
+
+type TitleProps = {
+  onDiet: YesOrNo;
+};
 
 export const Container = styled(SafeAreaView)`
   flex: 1;
@@ -9,17 +14,29 @@ export const Container = styled(SafeAreaView)`
   justify-content: center;
 `;
 
-export const Title = styled.Text`
-  ${({ theme }) => css`
+export const Title = styled.Text<TitleProps>`
+  ${({ theme, onDiet }) => css`
     font-family: ${theme.FONT_FAMILY.BOLD};
     font-size: ${theme.FONT_SIZE.XL}px;
-    color: ${theme.COLORS.GREEN_DARK};
+    color: ${onDiet === "yes"
+      ? theme.COLORS.GREEN_DARK
+      : theme.COLORS.RED_DARK};
   `}
 `;
 
 export const Subtitle = styled.Text`
+  text-align: center;
+  margin-top: 8px;
   ${({ theme }) => css`
     font-family: ${theme.FONT_FAMILY.REGULAR};
+    font-size: ${theme.FONT_SIZE.MD}px;
+    color: ${theme.COLORS.GRAY_100};
+  `}
+`;
+
+export const BoldText = styled.Text`
+  ${({ theme }) => css`
+    font-family: ${theme.FONT_FAMILY.BOLD};
     font-size: ${theme.FONT_SIZE.MD}px;
     color: ${theme.COLORS.GRAY_100};
   `}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { SectionList } from "react-native";
 
@@ -11,9 +11,11 @@ import { Header } from "@components/Header";
 import { Meal } from "@components/Meal";
 import { PercentageCard } from "@components/PercentageCard";
 
-import { getMealsFromStorage, getStatisticsFromStorage } from "@utils/storage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MEALS, STATISTICS } from "@utils/storageKeys";
+import {
+  calculateAndSaveStatistics,
+  getMealsFromStorage,
+  getStatisticsFromStorage,
+} from "@utils/storage";
 import { MealByDate, Statisctics } from "@utils/types";
 
 import { Container, MealSectionTitle, MealsHeading } from "./styles";
@@ -53,6 +55,7 @@ export function Home() {
   }
 
   async function loadStatistics() {
+    await calculateAndSaveStatistics();
     const statisticsFromStorage = await getStatisticsFromStorage();
 
     setStatistics(statisticsFromStorage);
@@ -89,8 +92,7 @@ export function Home() {
         )}
         renderItem={({ item }) => (
           <Meal
-            title={item.name}
-            time={item.time}
+            data={item}
             onPress={() =>
               navigation.navigate("MealDetails", { mealId: item.id })
             }

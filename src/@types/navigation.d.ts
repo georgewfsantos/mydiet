@@ -7,7 +7,7 @@ export declare global {
       Statistics: undefined;
       RegisterMeal: undefined;
       EditMeal: {
-        meal: {};
+        mealId: string;
       };
       Feedback: {
         onDiet: string;

@@ -22,7 +22,7 @@ export function YesOrNoButton({ type, isSelected, ...props }: Props) {
         size={8}
         weight="fill"
       />
-      <Title>{type === "yes" ? "Sim" : "No"}</Title>
+      <Title>{type === "yes" ? "Sim" : "Não"}</Title>
     </Container>
   );
 }

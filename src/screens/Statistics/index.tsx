@@ -21,14 +21,6 @@ import {
   OnAndOffDietInfo,
 } from "./styles";
 
-/*
-Pra calcular a bestSequence:
-
-1- Calcular quantas vezes aparece o registro de uma refeição fora da dieta
-2 - pra cada vez que esse registro ocorrer, calcular quantos elementos vem antes de cada um
-3 - depois calcular qual grupo tem o maior length
-*/
-
 export function Statistics() {
   const [statistics, setStatistics] = useState<Statisctics>({} as Statisctics);
 

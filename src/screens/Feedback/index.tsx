@@ -1,11 +1,14 @@
 import { StatusBar } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import illustration from "@assets/on-diet-image.png";
+import positiveFeedbackImage from "@assets/on-diet-image.png";
+import negativeFeedbackImage from "@assets/off-diet-image.png";
+
 import { Button } from "@components/Button";
 
 import {
+  BoldText,
   ButtonWrapper,
   Container,
   Illustration,
@@ -13,9 +16,33 @@ import {
   Subtitle,
   Title,
 } from "./styles";
+import { YesOrNo } from "@components/YesOrNoButton";
+
+type RouteParams = {
+  onDiet: YesOrNo;
+};
 
 export function Feedback() {
   const navigation = useNavigation();
+
+  const route = useRoute();
+
+  const { onDiet } = route.params as RouteParams;
+
+  const isOnDiet = onDiet === "yes";
+
+  function FormattedSubtitle() {
+    return isOnDiet ? (
+      <Subtitle>
+        Você continua <BoldText>dentro da dieta</BoldText>. Muito bem!
+      </Subtitle>
+    ) : (
+      <Subtitle>
+        Você <BoldText>saiu da dieta</BoldText> dessa vez, mas coninue se
+        esforçando e não desista!
+      </Subtitle>
+    );
+  }
 
   return (
     <Container>
@@ -25,11 +52,16 @@ export function Feedback() {
         translucent
       />
 
-      <Title>Continue assim!</Title>
-      <Subtitle>Você continua dentro da dieta. Muito bem!</Subtitle>
+      <Title onDiet={onDiet}>
+        {isOnDiet ? "Continue assim!" : "Que pena!"}
+      </Title>
+      <FormattedSubtitle />
 
       <ImageContainer>
-        <Illustration source={illustration} resizeMode="contain" />
+        <Illustration
+          source={isOnDiet ? positiveFeedbackImage : negativeFeedbackImage}
+          resizeMode="contain"
+        />
       </ImageContainer>
 
       <ButtonWrapper>

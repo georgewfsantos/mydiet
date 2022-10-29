@@ -2,9 +2,21 @@ import { ArrowLeft, Circle } from "phosphor-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled, { css } from "styled-components/native";
 
-export const Container = styled(SafeAreaView)`
+import { YesOrNo } from "@components/YesOrNoButton";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
+type IndicatorProps = {
+  color: string;
+};
+
+type ContainerProps = {
+  onDiet: YesOrNo | "";
+};
+
+export const Container = styled(SafeAreaView)<ContainerProps>`
   flex: 1;
-  background-color: ${({ theme }) => theme.COLORS.GREEN_LIGHT};
+  background-color: ${({ theme, onDiet }) =>
+    onDiet === "yes" ? theme.COLORS.GREEN_LIGHT : theme.COLORS.RED_LIGHT};
 `;
 
 export const Header = styled.View`
@@ -92,8 +104,8 @@ export const Chip = styled.View`
   margin: 24px 0px;
 `;
 
-export const Indicator = styled(Circle).attrs(({ theme }) => ({
-  color: theme.COLORS.GREEN_DARK,
+export const Indicator = styled(Circle).attrs<IndicatorProps>(({ color }) => ({
+  color: color,
   size: 8,
   weight: "fill",
 }))`

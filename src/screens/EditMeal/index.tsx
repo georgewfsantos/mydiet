@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import { YesOrNo } from "@components/YesOrNoButton";
+import { MealForm } from "@components/MealForm";
+import { Meal } from "@utils/types";
 
 import {
   Container,
@@ -13,14 +14,32 @@ import {
   HeaderRightElement,
   Content,
 } from "./styles";
-import { MealForm } from "@components/MealForm";
+import { getMealsFromStorage } from "@utils/storage";
 
-type SelectedButton = YesOrNo | "";
+type RouteParams = {
+  mealId: string;
+};
 
 export function EditMeal() {
-  const [selectedButton, setSelectedButton] = useState<SelectedButton>("");
+  const [meal, setMeal] = useState<Meal>({} as Meal);
 
   const navigation = useNavigation();
+
+  const route = useRoute();
+
+  const { mealId } = route.params as RouteParams;
+
+  useEffect(() => {
+    async function loadFormData() {
+      const meals = await getMealsFromStorage();
+
+      const mealData = meals.find((item) => item.id === mealId);
+
+      setMeal(mealData);
+    }
+
+    loadFormData();
+  }, []);
 
   return (
     <Container>
@@ -32,7 +51,7 @@ export function EditMeal() {
         <HeaderRightElement />
       </Header>
       <Content>
-        <MealForm isEditMode />
+        <MealForm isEditMode data={meal} />
       </Content>
     </Container>
   );
