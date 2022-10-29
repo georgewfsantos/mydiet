@@ -1,9 +1,13 @@
+import { useEffect, useState } from "react";
+
 import { StatusBar } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 
 import { InfoCard } from "@components/InfoCard";
 import { OnAndOffDietCard } from "@components/OnAndOffDietCard";
+import { getStatisticsFromStorage } from "@utils/storage";
+import { Statisctics } from "@utils/types";
 
 import {
   ArrowLeftlIcon,
@@ -17,11 +21,33 @@ import {
   OnAndOffDietInfo,
 } from "./styles";
 
+/*
+Pra calcular a bestSequence:
+
+1- Calcular quantas vezes aparece o registro de uma refeição fora da dieta
+2 - pra cada vez que esse registro ocorrer, calcular quantos elementos vem antes de cada um
+3 - depois calcular qual grupo tem o maior length
+*/
+
 export function Statistics() {
+  const [statistics, setStatistics] = useState<Statisctics>({} as Statisctics);
+
+  const { onDiet, offDiet, registeredMeals } = statistics;
+
   const navigation = useNavigation();
 
+  async function loadStatistics() {
+    const statisticsFromStorage = await getStatisticsFromStorage();
+
+    setStatistics(statisticsFromStorage);
+  }
+
+  useEffect(() => {
+    loadStatistics();
+  }, []);
+
   return (
-    <Container>
+    <Container percentage={onDiet?.percentage}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
@@ -31,27 +57,27 @@ export function Statistics() {
         <IconContainer onPress={() => navigation.goBack()}>
           <ArrowLeftlIcon />
         </IconContainer>
-        <Percentage>90,86%</Percentage>
+        <Percentage>{onDiet?.percentage}%</Percentage>
         <Caption>das refeições dentro da dieta</Caption>
       </PercentageWrapper>
       <Content>
         <Header>Estatísticas gerais</Header>
 
         <InfoCard
-          value={22}
+          value={onDiet?.bestSequence}
           description="melhor sequência de pratos dentro da dieta"
         />
 
-        <InfoCard value={109} description="refeições registradas" />
+        <InfoCard value={registeredMeals} description="refeições registradas" />
 
         <OnAndOffDietInfo>
           <OnAndOffDietCard
-            value={99}
+            value={onDiet?.total}
             description="refeições dentro da dieta"
             type="on"
           />
           <OnAndOffDietCard
-            value={10}
+            value={offDiet?.total}
             description="refeições fora da dieta"
             type="off"
           />

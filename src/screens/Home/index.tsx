@@ -11,9 +11,9 @@ import { Header } from "@components/Header";
 import { Meal } from "@components/Meal";
 import { PercentageCard } from "@components/PercentageCard";
 
-import { getMealsFromStorage } from "@utils/storage";
+import { getMealsFromStorage, getStatisticsFromStorage } from "@utils/storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MEALS } from "@utils/storageKeys";
+import { MEALS, STATISTICS } from "@utils/storageKeys";
 import { MealByDate, Statisctics } from "@utils/types";
 
 import { Container, MealSectionTitle, MealsHeading } from "./styles";
@@ -36,7 +36,11 @@ export function Home() {
 
     const dates = storedMeals.map((meal) => meal.date);
 
-    const sortedMeals = dates.map((date) => {
+    const nonDuplicatedDates = dates.filter(
+      (date, index) => dates.indexOf(date) === index
+    );
+
+    const sortedMeals = nonDuplicatedDates.map((date) => {
       const meals = storedMeals.filter((item) => item.date === date);
 
       return {
@@ -48,30 +52,16 @@ export function Home() {
     setMealsByDate(sortedMeals);
   }
 
-  async function calculateDietStatistics() {
-    const meals = await getMealsFromStorage();
+  async function loadStatistics() {
+    const statisticsFromStorage = await getStatisticsFromStorage();
 
-    const onDietMealsPercentage =
-      (meals.filter((meal) => meal.onDiet === "yes").length / meals.length) *
-      100;
-
-    setStatistics({
-      registeredMeals: meals.length,
-      onDiet: {
-        total: meals.filter((meal) => meal.onDiet === "yes").length,
-        percentage: onDietMealsPercentage,
-        bestSequence: 0,
-      },
-      offDiet: {
-        total: meals.filter((meal) => meal.onDiet === "no").length,
-      },
-    });
+    setStatistics(statisticsFromStorage);
   }
 
   useFocusEffect(
     useCallback(() => {
       sortMealsByDate();
-      calculateDietStatistics();
+      loadStatistics();
     }, [])
   );
 

@@ -19,14 +19,10 @@ export function PercentageCard({ statistics }: Props) {
   const { onDiet } = statistics;
 
   return (
-    <Container>
+    <Container percentage={onDiet?.percentage}>
       <Percentage>{onDiet?.percentage}%</Percentage>
       <Caption>das refeições dentro da dieta</Caption>
-      <IconContainer
-        onPress={() =>
-          navigation.navigate("Statistics", { onDietPercentage: 0 })
-        }
-      >
+      <IconContainer onPress={() => navigation.navigate("Statistics")}>
         <ArrowDiagonalIcon />
       </IconContainer>
     </Container>

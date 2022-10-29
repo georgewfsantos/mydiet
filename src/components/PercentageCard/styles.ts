@@ -1,9 +1,14 @@
 import styled, { css } from "styled-components/native";
 import { ArrowUpRight } from "phosphor-react-native";
 
-export const Container = styled.View`
+type ContainerProps = {
+  percentage: number;
+};
+
+export const Container = styled.View<ContainerProps>`
   width: 100%;
-  background-color: ${({ theme }) => theme.COLORS.GREEN_LIGHT};
+  background-color: ${({ theme, percentage }) =>
+    percentage > 65 ? theme.COLORS.GREEN_LIGHT : theme.COLORS.RED_LIGHT};
   justify-content: center;
   align-items: center;
   padding: 20px 16px;

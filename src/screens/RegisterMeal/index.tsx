@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { YesOrNo } from "@components/YesOrNoButton";
 
-import { MEALS } from "@utils/storageKeys";
+import { MEALS, STATISTICS } from "@utils/storageKeys";
 import { getMealsFromStorage } from "@utils/storage";
 
 import { MealForm } from "@components/MealForm";

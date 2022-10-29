@@ -2,9 +2,14 @@ import { ArrowLeft } from "phosphor-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled, { css } from "styled-components/native";
 
-export const Container = styled(SafeAreaView)`
+type ContainerProps = {
+  percentage: number;
+};
+
+export const Container = styled(SafeAreaView)<ContainerProps>`
   flex: 1;
-  background-color: ${({ theme }) => theme.COLORS.GREEN_LIGHT};
+  background-color: ${({ theme, percentage }) =>
+    percentage > 65 ? theme.COLORS.GREEN_LIGHT : theme.COLORS.RED_LIGHT};
 `;
 
 export const PercentageWrapper = styled.View`

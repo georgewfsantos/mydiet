@@ -9,15 +9,20 @@ import uuid from "react-native-uuid";
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
 import { YesOrNo, YesOrNoButton } from "@components/YesOrNoButton";
-import { MEALS } from "@utils/storageKeys";
+import { MEALS, STATISTICS } from "@utils/storageKeys";
 import { getMealsFromStorage } from "@utils/storage";
 
 import { Form, DateAndTime, OnOrOffDietPicker, Label, Options } from "./styles";
+import { Meal, MealByDate } from "@utils/types";
 
 type SelectedButton = YesOrNo | "";
 
 type Props = {
   isEditMode?: boolean;
+};
+
+type Sequence = {
+  [index: number]: [number];
 };
 
 export function MealForm({ isEditMode = false }: Props) {
@@ -29,6 +34,51 @@ export function MealForm({ isEditMode = false }: Props) {
   const [time, setTime] = useState("");
 
   const navigation = useNavigation();
+
+  async function calculateAndSaveStatistics() {
+    const meals = await getMealsFromStorage();
+
+    const onDietMealsPercentage = (
+      (meals.filter((meal: Meal) => meal.onDiet === "yes").length /
+        meals.length) *
+      100
+    ).toFixed(2);
+
+    const getBestSequence = () => {
+      const sequences = {};
+      let onDietIndex = 0;
+
+      meals.forEach((meal) => {
+        if (meal.onDiet === "yes") {
+          sequences[onDietIndex] = (sequences[onDietIndex] ?? 0) + 1;
+        }
+
+        if (meal.onDiet === "no") {
+          onDietIndex++;
+        }
+      });
+
+      return Math.max.apply(null, Object.values(sequences));
+    };
+
+    const statistics = {
+      registeredMeals: meals.length,
+      onDiet: {
+        total: meals.filter((meal) => meal.onDiet === "yes").length,
+        percentage: onDietMealsPercentage,
+        bestSequence: getBestSequence(),
+      },
+      offDiet: {
+        total: meals.filter((meal) => meal.onDiet === "no").length,
+      },
+    };
+
+    try {
+      await AsyncStorage.setItem(STATISTICS, JSON.stringify(statistics));
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async function handleMealRegistration() {
     try {
@@ -47,7 +97,9 @@ export function MealForm({ isEditMode = false }: Props) {
         MEALS,
         JSON.stringify([...storedMeals, newMeal])
       );
-      navigation.navigate("Feedback", { onDiet: "" });
+
+      await calculateAndSaveStatistics();
+      navigation.navigate("Feedback", { onDiet: selectedButton });
     } catch (error) {
       Alert.alert(
         "Cadastro de Refeição",

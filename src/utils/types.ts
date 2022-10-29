@@ -1,10 +1,12 @@
+import { YesOrNo } from "@components/YesOrNoButton";
+
 type Meal = {
   id: string;
   name: string;
   description: string;
   date: string;
   time: string;
-  onDiet: boolean;
+  onDiet: YesOrNo | "";
 };
 
 type MealByDate = {

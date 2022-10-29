@@ -1,10 +1,10 @@
+import { Statisctics } from "@utils/types";
+
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined;
-      Statistics: {
-        onDietPercentage: number;
-      };
+      Statistics: undefined;
       RegisterMeal: undefined;
       EditMeal: {
         meal: {};
